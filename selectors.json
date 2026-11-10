@@ -1,0 +1,252 @@
+{
+  "claude": {
+    "url_pattern": "claude.ai",
+    "home_url": "https://claude.ai/new",
+    "input_selectors": [
+      "div[contenteditable='true'].ProseMirror",
+      "div[contenteditable='true']",
+      "div[role='textbox']"
+    ],
+    "send_button_selectors": [
+      "button[aria-label*='Send']",
+      "button[aria-label*='Kirim']"
+    ],
+    "stop_button_selectors": [
+      "button[aria-label*='Stop']",
+      "button[aria-label*='Cancel']",
+      "button[aria-label*='Hentikan']"
+    ],
+    "streaming_selectors": [
+      "[data-is-streaming='true']"
+    ],
+    "message_selectors": [
+      ".font-claude-message",
+      "div.standard-markdown"
+    ],
+    "rate_limit_patterns": [
+      "message limit",
+      "reached your limit",
+      "resets at",
+      "try again at",
+      "out of free messages",
+      "limit reached",
+      "you are out of free messages",
+      "upgrade to claude pro",
+      "upgrade to continue",
+      "reached the message limit",
+      "free message limit",
+      "batas pesan",
+      "mencapai batas"
+    ],
+    "generation_error_patterns": [
+      "error generating response",
+      "claude had an error",
+      "failed to generate",
+      "something went wrong",
+      "unable to respond",
+      "conversation is too long"
+    ],
+    "auth_urls": [
+      "claude.ai/login",
+      "auth.anthropic.com"
+    ],
+    "auth_patterns": [
+      "sign in to claude",
+      "log in to claude",
+      "verify you are human",
+      "just a moment..."
+    ]
+  },
+  "chatgpt": {
+    "url_pattern": "chatgpt.com",
+    "home_url": "https://chatgpt.com",
+    "default_thinking": true,
+    "input_selectors": [
+      "div.ProseMirror[role='textbox']",
+      "div.ProseMirror[contenteditable='true']",
+      "#prompt-textarea",
+      "div[data-composer-body] div[contenteditable='true']",
+      "div[aria-label*='ChatGPT'][role='textbox']",
+      "div[contenteditable='true']:not(.cm-content)",
+      "textarea[data-id]"
+    ],
+    "send_button_selectors": [
+      "button[data-testid='send-button']",
+      "button[aria-label*='Send']",
+      "button[aria-label*='Kirim']"
+    ],
+    "stop_button_selectors": [
+      "button[data-testid='stop-button']",
+      "button[data-testid*='stop']",
+      "button[aria-label*='Stop']",
+      "button[aria-label*='Hentikan']"
+    ],
+    "streaming_selectors": [
+      "[data-is-streaming='true']",
+      ".result-streaming",
+      "[class*='streaming']"
+    ],
+    "message_selectors": [
+      "[class*='MarkdownRoot']",
+      "[data-chatgpt-search-unit-key*='assistant'] [class*='MarkdownRoot']",
+      "[data-markdown-text-style='assistant']",
+      "div[data-chatgpt-search-unit-key*='assistant']",
+      "div[data-message-author-role='assistant']",
+      "div.markdown"
+    ],
+    "rate_limit_patterns": [
+      "you've reached your",
+      "limit for",
+      "try again later",
+      "usage cap",
+      "hourly limit"
+    ],
+    "auth_urls": [
+      "chatgpt.com/auth/login",
+      "auth0.openai.com"
+    ],
+    "auth_patterns": [
+      "log in to chatgpt",
+      "welcome back",
+      "verify you are human",
+      "just a moment..."
+    ]
+  },
+  "qwen": {
+    "url_pattern": "chat.qwen.ai",
+    "home_url": "https://chat.qwen.ai",
+    "default_model": "Qwen3.8-Max",
+    "default_reasoning": "Berpikir",
+    "model_trigger": ".wms-trigger",
+    "input_selectors": [
+      "textarea.message-input-textarea",
+      "textarea[placeholder*='Tanya Qwen']",
+      "textarea[placeholder*='Tanya']",
+      "textarea[placeholder*='Ask']",
+      "textarea[placeholder*='Send a message']",
+      "textarea.chat-input",
+      "div[contenteditable='true']",
+      "textarea"
+    ],
+    "send_button_selectors": [
+      ".message-input-right-button-send button",
+      ".message-input-right-button-send",
+      "button[aria-label*='Send']",
+      "button[aria-label*='Kirim']",
+      "button.send-button",
+      "div.chat-prompt-send-button"
+    ],
+    "stop_button_selectors": [
+      ".message-input-right-button-stop",
+      "div.message-input-right-button-stop",
+      "button[aria-label*='Stop']",
+      "button[aria-label*='Cancel']",
+      "button[aria-label*='Hentikan']",
+      "button.stop-btn"
+    ],
+    "streaming_selectors": [
+      "[data-is-streaming='true']",
+      ".loading",
+      ".thinking"
+    ],
+    "message_selectors": [
+      ".qwen-chat-message-assistant .response-message-content",
+      ".qwen-chat-message-assistant .custom-qwen-markdown",
+      ".qwen-chat-message-assistant .chat-response-message-render-flow",
+      ".qwen-chat-message-assistant"
+    ],
+    "rate_limit_patterns": [
+      "usage limit",
+      "rate limit",
+      "too many requests",
+      "exceeded",
+      "try again later",
+      "reach the limit",
+      "limit reached"
+    ],
+    "auth_urls": [
+      "chat.qwen.ai/login",
+      "auth.alibabacloud.com"
+    ],
+    "auth_patterns": [
+      "sign in to continue",
+      "log in to qwen",
+      "verify you are human",
+      "continue with google"
+    ]
+  },
+  "gemini": {
+    "url_pattern": "gemini.google.com",
+    "home_url": "https://gemini.google.com/app?hl=id",
+    "default_model": "4 Argon",
+    "default_reasoning": "Tinggi",
+    "default_mode": "Percakapan",
+    "model_trigger_selector": "[data-test-id='bard-mode-menu-button'] button, button[aria-label*='pemilih mode']",
+    "input_selectors": [
+      ".ql-editor",
+      "rich-textarea div[contenteditable='true'][role='textbox']",
+      "rich-textarea .ql-editor",
+      "div[role='textbox'][aria-label*='Gemini']"
+    ],
+    "send_button_selectors": [
+      "button[aria-label='Kirim pesan']",
+      "button[aria-label='Send message']",
+      "button[aria-label*='Kirim']",
+      "button[aria-label*='Send']"
+    ],
+    "stop_button_selectors": [
+      "button[aria-label*='Hentikan']",
+      "button[aria-label*='Stop']"
+    ],
+    "streaming_selectors": [
+      "button[aria-label*='Hentikan']",
+      "button[aria-label*='Stop']",
+      ".processing-state-visible",
+      ".has-thoughts"
+    ],
+    "new_chat_selectors": [
+      "[data-test-id='side-nav-sparkle-button']",
+      "a[aria-label*='Chat baru']",
+      "a[aria-label*='Percakapan baru']",
+      "[data-test-id='new-chat-button']",
+      "button[aria-label*='Percakapan baru']"
+    ],
+    "message_selectors": [
+      "model-response",
+      "structured-content-container.model-response-text",
+      ".response-container-content"
+    ],
+    "toast_selectors": [
+      "snack-bar-container",
+      ".mat-mdc-snack-bar-label",
+      "[role='alert']"
+    ],
+    "rate_limit_patterns": [
+      "batas direset pada",
+      "batas direset",
+      "limit resets at",
+      "limit resets",
+      "batas",
+      "kuota",
+      "limit",
+      "terlalu banyak",
+      "coba lagi nanti",
+      "tidak tersedia",
+      "terjadi masalah",
+      "something went wrong",
+      "usage limit"
+    ],
+    "auth_urls": [
+      "accounts.google.com",
+      "consent.google.com",
+      "/sorry/"
+    ],
+    "auth_patterns": [
+      "masuk dengan akun google",
+      "sign in with google",
+      "verifikasi identitas",
+      "verify it's you",
+      "unusual traffic from your computer network"
+    ]
+  }
+}
