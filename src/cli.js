@@ -34,6 +34,34 @@ async function main() {
       console.log('\n=== MEMBUKA GOOGLE CHROME ===');
       await orchestrator.browserManager.ensureBrowser(console.log);
       console.log('✅ Google Chrome telah aktif dengan tab Claude, Gemini, Qwen, dan ChatGPT.');
+    } else if (command === 'session-list' || command === 'sessions') {
+      const list = orchestrator.sessionHistory.listSessions();
+      console.log('\n=== DAFTAR SESI OBROLAN ORBIT ===');
+      console.table(list);
+    } else if (command === 'session-show') {
+      const sessId = args[1] || orchestrator.sessionHistory.activeSessionId;
+      orchestrator.sessionHistory.switchSession(sessId);
+      const turns = orchestrator.sessionHistory.getTurns();
+      console.log(`\n=== RIWAYAT SESI: ${sessId} (${turns.length} turns) ===`);
+      turns.forEach((t, i) => {
+        const author = t.role === 'user' ? '👤 USER' : `🤖 ${t.provider ? t.provider.toUpperCase() : 'ASSISTANT'}`;
+        console.log(`\n[#${i + 1}] ${author} (${t.timestamp}):`);
+        console.log(t.content.slice(0, 300) + (t.content.length > 300 ? '... [truncated]' : ''));
+      });
+      console.log('\n========================================\n');
+    } else if (command === 'session-export') {
+      const sessId = args[1] || orchestrator.sessionHistory.activeSessionId;
+      orchestrator.sessionHistory.switchSession(sessId);
+      const md = orchestrator.sessionHistory.exportMarkdown();
+      const exportPath = path.join(process.cwd(), 'scratch', `transcript_${sessId}.md`);
+      try {
+        const dir = path.dirname(exportPath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(exportPath, md, 'utf-8');
+        console.log(`\n✅ Transkrip sesi berhasil diekspor ke: ${exportPath}\n`);
+      } catch (err) {
+        console.error(`Gagal mengekspor: ${err.message}`);
+      }
     } else if (command === 'prompt-optimize') {
       const rawPrompt = args.slice(1).join(' ');
       if (!rawPrompt.trim()) {
@@ -61,6 +89,8 @@ async function main() {
       let promptFile = null;
       let useStdin = false;
       let allowDowngrade = false;
+      let tone = null;
+      let sessionId = null;
 
       while (promptArgs.length > 0 && promptArgs[0].startsWith('--')) {
         if (promptArgs[0] === '--model') {
@@ -71,6 +101,12 @@ async function main() {
           promptArgs = promptArgs.slice(2);
         } else if (promptArgs[0] === '--reasoning') {
           reasoning = promptArgs[1];
+          promptArgs = promptArgs.slice(2);
+        } else if (promptArgs[0] === '--tone') {
+          tone = promptArgs[1];
+          promptArgs = promptArgs.slice(2);
+        } else if (promptArgs[0] === '--session' || promptArgs[0] === '--session-id') {
+          sessionId = promptArgs[1];
           promptArgs = promptArgs.slice(2);
         } else if (promptArgs[0] === '--files' || promptArgs[0] === '--file') {
           if (promptArgs[1]) {
@@ -141,6 +177,8 @@ async function main() {
       if (mode) console.log(`Mode Target : ${mode}`);
       if (reasoning) console.log(`Reasoning   : ${reasoning}`);
       if (explicitDomain) console.log(`Domain      : ${explicitDomain}`);
+      if (sessionId) console.log(`Session ID  : ${sessionId}`);
+      if (tone) console.log(`Tone        : ${tone}`);
       if (resetSession) console.log(`Reset Sesi  : Aktif (New Chat)`);
       if (allowDowngrade) console.log(`Downgrade   : Diizinkan (--allow-downgrade)`);
       console.log(`Evaluator   : ${interrogate ? `Aktif (Tier ${tier}, Max ${safetyMaxTurns} turns)` : 'Nonaktif'}`);
@@ -151,6 +189,8 @@ async function main() {
         forceModel,
         mode,
         reasoning,
+        tone,
+        sessionId,
         files,
         domain: explicitDomain,
         tier,

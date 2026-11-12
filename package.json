@@ -1,14 +1,14 @@
 {
   "name": "orbit-bridge",
-  "version": "2.4.0",
-  "description": "ORBIT (Orchestrated Reasoning Bridge for Interactive Tabs) - Multi-LLM browser orchestrator with stream recovery, math normalization, formula preservation, Evaluator-Optimizer loop, Tri-Layer Execution Gate, Hybrid Resilient Quota Reclaim, and multi-tier failover for Antigravity",
+  "version": "2.5.0",
+  "description": "ORBIT (Orchestrated Reasoning Bridge for Interactive Tabs) - Multi-LLM browser orchestrator with multi-session isolation, stream recovery, math normalization, formula preservation, Evaluator-Optimizer loop, Tri-Layer Execution Gate, and multi-tier failover for Antigravity & Claude Code",
   "main": "src/orchestrator.js",
   "bin": {
     "orbit": "./src/cli.js",
     "web-llm-orchestrator": "./src/cli.js"
   },
   "scripts": {
-    "test": "node tests/prompt_input.test.js && node tests/critique_contract.test.js && node tests/critic_engine.test.js && node tests/session_history.test.js && node tests/orchestrator_files.test.js && node tests/lock_manager.test.js && node tests/offline_fixtures.test.js && node tests/gemini_driver.test.js && node tests/qwen_driver.test.js && node tests/chatgpt_driver.test.js && node tests/claude_driver.test.js && node tests/orchestrator_recovery.test.js && node tests/prompt_synthesizer.test.js && node tests/interrogation_engine.test.js && node tests/parse_reset.test.js && node tests/cooldown_store.test.js && node --test tests/modules.test.js",
+    "test": "node tests/prompt_input.test.js && node tests/critique_contract.test.js && node tests/critic_engine.test.js && node tests/session_history.test.js && node tests/session_history_v2.test.js && node tests/orchestrator_files.test.js && node tests/lock_manager.test.js && node tests/offline_fixtures.test.js && node tests/gemini_driver.test.js && node tests/qwen_driver.test.js && node tests/chatgpt_driver.test.js && node tests/claude_driver.test.js && node tests/orchestrator_recovery.test.js && node tests/prompt_synthesizer.test.js && node tests/prompt_synthesizer_v2.test.js && node tests/interrogation_engine.test.js && node tests/parse_reset.test.js && node tests/cooldown_store.test.js && node --test tests/modules.test.js",
     "start": "node src/mcp_server.js"
   },
   "keywords": [

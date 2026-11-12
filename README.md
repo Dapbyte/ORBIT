@@ -1,8 +1,8 @@
-# 🪐 ORBIT (`/orbit` / `/llm` / `/web-llm-orchestrator`) [v2.4.0]
+# 🪐 ORBIT (`/orbit` / `/llm` / `/web-llm-orchestrator`) [v2.5.0]
 
 > **Orchestrated Reasoning Bridge for Interactive Tabs**  
 > *One orchestration core. An entire orbit of web intelligence.*  
-> Stateful multi-LLM browser orchestration, stream recovery, formula-preserving extraction, Lyra 4-D prompt optimizer, Evidence-Gated Critique, Google Gemini 4 Argon, hybrid resilient quota reclaim, & multi-tier failover for Antigravity & local AI coding agents via Chrome DevTools Protocol (CDP port 127.0.0.1:9222).
+> Stateful multi-LLM browser orchestration, multi-session context isolation, stream recovery, formula-preserving extraction, Lyra 4-D adaptive intent optimizer, Evidence-Gated Critique, Google Gemini 4 Argon, hybrid resilient quota reclaim, & multi-tier failover for Antigravity & local AI coding agents via Chrome DevTools Protocol (CDP port 127.0.0.1:9222).
 
 ---
 
@@ -63,10 +63,11 @@ Proyek ini dibangun sebagai mekanisme **arbitrase kuota**—memanfaatkan langgan
 33. **Integrasi Flagship Google Gemini 4 Argon, Long Thinking Telemetry, & Segmented Mode Control (`gemini_driver.js`):** Menghubungkan Google Gemini (`gemini.google.com`) sebagai provider web tingkat pertama. Mengunci model flagship **`4 Argon`** (dengan opsi `3.8 Flash`) dan tingkat penalaran **`Tinggi`** (dengan opsi `Sedang`/`Rendah`). Mendukung segmented mode button `"Percakapan"` (default) vs `"Tugas"`, injeksi Quill editor `.ql-editor` via `document.execCommand('insertText')` + space trigger untuk memunculkan tombol kirim dinamis, penanganan Long Thinking Silence (45–72 detik) tanpa timeout prematur, dan ekstraksi formula KaTeX `<annotation>` non-destruktif ber-offscreen pre-wrap container. Terintegrasi penuh ke dalam rantai failover utama: `Claude` $\rightarrow$ `Gemini` $\rightarrow$ `Qwen` $\rightarrow$ `ChatGPT`.
 34. **Silent Model Downgrade Detection & Targeted Model Auto-Failover Protocol (`gemini_driver.js`, `orchestrator.js`, `cli.js`):** Mencegah degradasi kualitas diam-diam saat kuota model unggulan (Gemini 4 Argon) habis dan web Gemini otomatis berpindah ke `3.5 Flash-Lite` tanpa banner dialog error. Driver mendeteksi badge composer dan status disabled menu dropdown, lalu menandai status limit kuota. Di tingkat Orchestrator, jika mode terarah (`--model gemini`) terkena limit/downgrade, sistem tidak melempar crash fatal, melainkan mencatat `[AUTO-FAILOVER]` dan secara otomatis **mengoper (failover)** tugas ke kandidat berikutnya di rantai (`Claude`/`Qwen`/`ChatGPT`) berbekal Handoff Bundle Stream Recovery v1.5. CLI juga menyediakan opsi opt-in sadar `--allow-downgrade` jika pengguna sengaja mengizinkan fallback ke Flash-Lite.
 35. **Hybrid Resilient Quota Reclaim Architecture & DOM Reset Timestamp Predictive Lease (`parse_reset.js`, `cooldown_store.js`, `orchestrator.js`):** Mengganti cooldown statis (blind 60m / 12h) dengan arsitektur Circuit Breaker berbasis lease prediktif. `parse_reset.js` mengekstrak waktu reset konkret dari DOM UI multibahasa (ID/EN) vendor web ("Batas direset pada 14 Okt, 20.51", "until 3:00 AM", "dalam 45 menit") dan menyimpannya secara atomik ke `cooldown_state.json` via `cooldown_store.js` untuk dibagikan lintas proses (CLI & MCP). Selama `now < resetAt`, provider diskip instan (zero DOM overhead). Saat `now >= resetAt`, sistem memasuki fase `HALF_OPEN` untuk melakukan authoritative probe, otomatis menghapus status cooldown, dan merebut kembali (*reclaim*) model unggulan (Claude / Gemini 4 Argon) tanpa pernah terjebak permanen di Qwen. Dilengkapi decoupling pemeriksaan badge Flash-Lite pra-kirim pada `gemini_driver.js` sehingga switch kembali ke Argon pasca-reset kuota berjalan 100% mulus.
+36. **Multi-Session Context Isolation, Dynamic Failover Attribution, & Adaptive Intent Synthesis (`session_history.js`, `prompt_synthesizer.js`, `domain_rules.json`):** Mengisolasi riwayat percakapan per-ID sesi (`--session <id>`), auto-compaction sliding window, tracking metadata sesi, serta perintah CLI manajemen sesi (`session-list`, `session-show`, `session-export`). Mengganti notice pengalihan statis Claude menjadi notice dinamis berbasis vendor asal failover. Memperluas `PromptSynthesizer` dengan ekstraksi intent tugas (`audit_review`, `refactor_optimize`, `design_architecture`, `math_derivation`, `debug_fix`, `debate_challenge`), protokol penalaran mendalam (`--reasoning deep`), kendali tone (`caveman`/`academic`/`production`), sandboxing payload tugas, dan perluasan skema domain (`cybersecurity_audit`, `cloud_devops_infra`, `ai_agent_orchestration`).
 
 ---
 
-## 🚀 Alur Kerja & Arsitektur (v2.4.0)
+## 🚀 Alur Kerja & Arsitektur (v2.5.0)
 
 ```mermaid
 flowchart TD
@@ -231,10 +232,14 @@ Web-LLM Orchestrator - SKILL/
 ├── start_browser.bat            # Peluncur Chrome port 9222 (Windows CMD)
 ├── start_browser.ps1            # Peluncur Chrome port 9222 (PowerShell)
 ├── selectors.json               # Registry selector DOM & konfigurasi model/penalaran (Claude, Gemini, Qwen, ChatGPT)
-├── package.json                 # Dependensi proyek (puppeteer-core) v2.3.0
-├── SKILL.md                     # Skill resmi untuk Antigravity (v2.3.0)
-├── README.md                    # Dokumentasi lengkap proyek (v2.3.0)
-├── PRD.md                       # Product Requirements Document resmi (v2.3.0)
+├── package.json                 # Dependensi proyek (puppeteer-core) v2.5.0
+├── SKILL.md                     # Skill resmi untuk Antigravity & Claude Code (v2.5.0)
+├── README.md                    # Dokumentasi lengkap proyek (v2.5.0)
+├── PRD.md                       # Product Requirements Document resmi (v2.5.0)
+├── references/                  # Bundled skill references (progressive disclosure)
+│   ├── domain_catalogs.md       # Katalog lengkap skema domain Lyra 4-D
+│   ├── cli_and_mcp_reference.md # Referensi parameter CLI dan skema tool MCP
+│   └── troubleshooting.md       # Panduan recovery koneksi, CDP, dan batas kuota
 ├── src/
 │   ├── browser_manager.js       # Pengelola koneksi CDP & persistent tabs (Claude, Gemini, Qwen, ChatGPT)
 │   ├── orchestrator.js          # Koordinator alur failover (Claude -> Gemini -> Qwen -> ChatGPT), stream recovery & critic loop
@@ -246,13 +251,13 @@ Web-LLM Orchestrator - SKILL/
 │   ├── contracts/
 │   │   └── critique_contract.js # Universal Critique & Framing Contract validator
 │   ├── templates/
-│   │   └── domain_rules.json    # Skema deklaratif multi-domain (software_engineering, data_science_ai, academic_research_latex)
-│   ├── prompt_synthesizer.js    # Lyra 4-D prompt optimizer & data-driven domain engine
+│   │   └── domain_rules.json    # Skema deklaratif multi-domain (software_engineering, cybersecurity, devops, agents, pkm_kc)
+│   ├── prompt_synthesizer.js    # Lyra 4-D prompt optimizer v2.5 & adaptive intent engine
 │   ├── stream_recovery.js       # Engine sealTail, buildLedger, buildPrompt nonce & stitch
 │   ├── math_normalizer.js       # Parser regex delimiter LaTeX, currency guard & quarantine
-│   ├── session_history.js       # Turn-by-turn buffer & generator Handoff Bundle
+│   ├── session_history.js       # Turn-by-turn buffer, multi-session isolation & dynamic Handoff Bundle
 │   ├── lock_manager.js          # File mutex lock berbasis PID, UUID token, dan TTL
-│   ├── cli.js                   # Terminal runner untuk pengujian langsung (--tier, --files, --model, --mode, --prompt-file)
+│   ├── cli.js                   # Terminal runner (--session, --tier, --files, --model, --tone, --reasoning)
 │   ├── mcp_server.js            # Server Model Context Protocol (stdio JSON-RPC)
 │   └── drivers/
 │       ├── base_driver.js       # Base class + preservasi LaTeX + deteksi Auth
@@ -262,7 +267,8 @@ Web-LLM Orchestrator - SKILL/
 │       └── chatgpt_driver.js    # Driver ChatGPT (Kunci mode Berpikir via Ctrl+Shift+M & Pre-Send Guard)
 └── tests/
     ├── prompt_input.test.js       # Unit test PromptInput Shell Safety Guard (E_INLINE_UNSAFE, BOM, file reading)
-    ├── session_history.test.js    # Unit test buffer giliran & handoff bundle
+    ├── session_history.test.js    # Unit test buffer giliran & handoff bundle baseline
+    ├── session_history_v2.test.js # Unit test multi-session isolation, dynamic handoff notice, & auto-compact
     ├── orchestrator_files.test.js # Unit test resolusi file & privacy guard
     ├── lock_manager.test.js       # Unit test mutex cross-process & stale cleanup
     ├── offline_fixtures.test.js   # Unit test deteksi limit, auth & ekstraksi KaTeX
@@ -271,7 +277,8 @@ Web-LLM Orchestrator - SKILL/
     ├── chatgpt_driver.test.js     # Unit test driver ChatGPT & isolasi composer ProseMirror
     ├── claude_driver.test.js      # Unit test driver Claude (Pre-Send Guard, Auto-Healing, /caveman Skill & Error Detection)
     ├── orchestrator_recovery.test.js # Unit test integrasi stream recovery & normalizer
-    ├── prompt_synthesizer.test.js # Unit test Lyra 4-D synthesizer & domain rules
+    ├── prompt_synthesizer.test.js # Unit test Lyra 4-D synthesizer & domain rules baseline
+    ├── prompt_synthesizer_v2.test.js # Unit test intent extraction, reasoning enforcement & new domains
     ├── interrogation_engine.test.js # Unit test AMTIL dynamic loop & plateau detection
     ├── critique_contract.test.js  # Unit test schema critique contract & evidence validation
     ├── critic_engine.test.js      # Unit test scoring deterministik, dynamic framing & plateau
@@ -282,7 +289,7 @@ Web-LLM Orchestrator - SKILL/
 
 ---
 
-## 🧪 Verifikasi & Pengujian Otomatis (17/17 Suites Passed)
+## 🧪 Verifikasi & Pengujian Otomatis (19/19 Suites Passed)
 
 Seluruh modul dilengkapi unit test mandiri tanpa bergantung pada browser hidup. Eksekusi pengujian secara menyeluruh:
 
@@ -296,6 +303,7 @@ Hasil verifikasi:
 ✅ Unit test critique_contract.test.js: BERHASIL (100% Passed)!
 ✅ Unit test critic_engine.test.js: BERHASIL (100% Passed)!
 ✅ Unit test session_history.test.js: BERHASIL (100% Passed)!
+✅ Unit test session_history_v2.test.js: BERHASIL (100% Passed)!
 ✅ Unit test orchestrator_files.test.js: BERHASIL (Privacy Guard 100% Passed)!
 ✅ Unit test lock_manager.test.js: BERHASIL (100% Passed)!
 ✅ Unit test offline_fixtures.test.js: BERHASIL (100% Passed)!
@@ -305,7 +313,10 @@ Hasil verifikasi:
 ✅ Unit test claude_driver.test.js: BERHASIL (100% Passed)!
 ✅ Unit test orchestrator_recovery.test.js: BERHASIL (100% Passed)!
 ✅ Unit test prompt_synthesizer.test.js: BERHASIL (100% Passed)!
+✅ Unit test prompt_synthesizer_v2.test.js: BERHASIL (100% Passed)!
 ✅ Unit test interrogation_engine.test.js: BERHASIL (100% Passed)!
+✅ Unit test parse_reset.test.js: BERHASIL (100% Passed)!
+✅ Unit test cooldown_store.test.js: BERHASIL (100% Passed)!
 ℹ tests 24 (modules.test.js: sealTail, ledger, prompt, stitch, math_normalizer)
 ℹ pass 24 / fail 0
 ```

@@ -225,7 +225,10 @@ class Orchestrator {
     }
 
     // Fallback standar: Bounded Context 3 giliran terakhir
-    const handoffBundle = this.sessionHistory.buildHandoffBundle(originalFullPrompt, 3);
+    const handoffBundle = this.sessionHistory.buildHandoffBundle(originalFullPrompt, {
+      maxTurns: 3,
+      fromProvider: previousProvider
+    });
     return {
       handoffPrompt: `${HANDOFF_CAVEMAN_FALLBACK_CONTRACT}${handoffBundle}`,
       sealedText: null,
@@ -369,6 +372,11 @@ class Orchestrator {
   async ask(prompt, options = {}) {
     const { forceModel = null, files = [], onLog = console.log } = options;
     const startTime = Date.now();
+
+    // -1. Session Isolation / Named Session Switch
+    if (options.sessionId) {
+      this.sessionHistory.switchSession(options.sessionId);
+    }
 
     // 0. Stage 1: Lyra 4-D Prompt Optimizer
     let basePrompt = prompt;

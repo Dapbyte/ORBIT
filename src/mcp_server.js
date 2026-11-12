@@ -111,6 +111,20 @@ rl.on('line', async (line) => {
                 reset_session: {
                   type: 'boolean',
                   description: 'Apakah mereset riwayat percakapan sebelum mengirim prompt ini (default false).'
+                },
+                session_id: {
+                  type: 'string',
+                  description: 'Opsional: ID sesi obrolan untuk isolasi konteks percakapan multi-thread (default "default").'
+                },
+                tone: {
+                  type: 'string',
+                  enum: ['caveman', 'academic', 'production', 'engineering'],
+                  description: 'Opsional: gaya/tone output yang diharapkan.'
+                },
+                reasoning: {
+                  type: 'string',
+                  enum: ['deep', 'balanced', 'quick'],
+                  description: 'Opsional: kedalaman penalaran (deep: CoT komprehensif, quick: ringkas).'
                 }
               },
               required: ['prompt']
@@ -148,6 +162,9 @@ rl.on('line', async (line) => {
           interrogate: isEvalActive,
           optimizePrompt: args.optimize_prompt !== undefined ? args.optimize_prompt : true,
           resetSession: args.reset_session !== undefined ? args.reset_session : false,
+          sessionId: args.session_id || 'default',
+          tone: args.tone || null,
+          reasoning: args.reasoning || null,
           onLog: (msg) => process.stderr.write(`${msg}\n`)
         });
 
